@@ -1,0 +1,39 @@
+workflows:
+  ios-altstore:
+    name: iOS AltStore Build
+    environment:
+      flutter: stable
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Setup
+        script: |
+          flutter pub get
+          cd ios
+          rm -rf Pods Podfile.lock
+          pod install --repo-update
+
+      - name: Build and package
+        script: |
+          cd ios
+          xcodebuild \
+            -workspace Runner.xcworkspace \
+            -scheme Runner \
+            -configuration Release \
+            -archivePath /Users/builder/clone/ios/Runner.xcarchive \
+            -destination "generic/platform=iOS" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            archive
+
+          APP_PATH=$(find /Users/builder/clone/ios/Runner.xcarchive -name "Runner.app" -type d | head -1)
+          cd /Users/builder/clone
+          mkdir -p Payload
+          cp -r "$APP_PATH" Payload/Runner.app
+          zip -r VinylHube.ipa Payload
+          mkdir -p output
+          cp VinylHube.ipa output/
+
+    artifacts:
+      - output/VinylHube.ipa
