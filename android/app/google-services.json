@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "227755250375",
+    "project_id": "vinyl-hube-9383f",
+    "storage_bucket": "vinyl-hube-9383f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:227755250375:android:b7a6c58d08176c3176e4e2",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBweErBGGQolgGgku5l2wBDvmZLt3FIDYw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
