@@ -11,6 +11,8 @@ workflows:
           flutter pub get
           cd ios
           rm -rf Pods Podfile.lock
+          # Forcer la plateforme iOS 15 dans le Podfile
+          sed -i '' "1s/^/platform :ios, '15.0'\n/" Podfile
           pod install --repo-update
 
       - name: Build and package
