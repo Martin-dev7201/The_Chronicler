@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'VinylHube',
+      title: 'The Chronicler',
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark(),
       home: const MainWrapper(),
