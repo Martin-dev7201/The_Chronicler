@@ -26,14 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-
-    <key>NSCameraUsageDescription</key>
-    <string>Nous avons besoin de ta caméra pour scanner les codes-barres de tes vinyles ! 🤘</string>
-    <key>NSPhotoLibraryUsageDescription</key>
-    <string>Accède à tes photos pour choisir la plus belle pochette de disque.</string>
-    <key>NSMicrophoneUsageDescription</key>
-    <string>Utilisé uniquement si tu filmes tes platines.</string>
-
+	<key>NSCameraUsageDescription</key>
+	<string>Cette application utilise la camera pour scanner les codes barres des vinyles.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Cette application accede a vos photos pour les pochettes de vinyles.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Acces au microphone pour les fonctions video.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
