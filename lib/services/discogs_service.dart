@@ -37,17 +37,23 @@ class DiscogsService {
     return results.map((r) => DiscogsSearchResult.fromSearch(r)).toList();
   }
 
-  // ── Détails complets d'une release ───────────────────────────────────
-  Future<DiscogsSearchResult?> _fetchRelease(
-      String id, Map<String, dynamic> searchResult) async {
+  // Dans _fetchRelease, ajoute un timeout
+Future<DiscogsSearchResult?> _fetchRelease(
+    String id, Map<String, dynamic> searchResult) async {
+  try {
     final uri = Uri.parse('$_baseUrl/releases/$id');
-    final response = await http.get(uri, headers: _headers);
+    final response = await http.get(uri, headers: _headers)
+        .timeout(const Duration(seconds: 5)); // ← TIMEOUT 5 secondes
     if (response.statusCode != 200) {
       return DiscogsSearchResult.fromSearch(searchResult);
     }
     final data = json.decode(response.body);
     return DiscogsSearchResult.fromRelease(data, searchResult);
+  } catch (e) {
+    // Si timeout ou erreur, on retourne le résultat de base sans tracklist
+    return DiscogsSearchResult.fromSearch(searchResult);
   }
+}
 
   Future<DiscogsSearchResult?> fetchReleaseById(
       String id, Map<String, dynamic> searchResult) {

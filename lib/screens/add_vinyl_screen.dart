@@ -180,6 +180,8 @@ class _AddVinylScreenState extends State<AddVinylScreen> {
     );
   }
 
+// ... (garder tout le début du fichier identique)
+
   Widget _buildSearchResults() {
     return ListView.builder(
       itemCount: _searchResults.length,
@@ -195,19 +197,29 @@ class _AddVinylScreenState extends State<AddVinylScreen> {
           ),
           title: Text(res.title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           subtitle: Text(res.artist, style: const TextStyle(color: Colors.white54)),
+          
+          // 🔥 TON NOUVEAU SYSTÈME DE CHARGEMENT RAPIDE ICI 🔥
           onTap: () async {
-            setState(() => _isLoading = true);
-            final fullRelease = await _discogs.fetchReleaseById(res.discogsId, {}); 
+            // 1. Affiche immédiatement la preview avec les infos de base
             setState(() {
-              _foundRelease = fullRelease;
-              _isLoading = false;
+              _foundRelease = res; // Affiche direct sans attendre le réseau
               _searchResults = [];
+              _isLoading = false;
             });
+
+            // 2. Charge la tracklist en arrière-plan (le "mixage" invisible)
+            final fullRelease = await _discogs.fetchReleaseById(res.discogsId, {});
+            if (fullRelease != null && mounted) {
+              setState(() {
+                _foundRelease = fullRelease; // Met à jour avec les détails complets (tracklist)
+              });
+            }
           },
         );
       },
     );
   }
+
 
   Widget _buildPreview() {
     return SingleChildScrollView(
