@@ -8,21 +8,31 @@ workflows:
     scripts:
       - name: Build and Package IPA (Unsigned)
         script: |
-          # 1. Récupérer proprement tous les packages Dart (palette_generator, Firebase, etc.)
+          # 1. Nettoyer les dépendances et récupérer les packages Dart
           flutter pub get
           
-          # 2. Forcer la création/réparation du dossier iOS (indispensable quand on développe sur Windows)
+          # 2. Générer l'infrastructure iOS native
           flutter create --platforms=ios .
           
-          # 3. Laisser Flutter configurer le Podfile et compiler l'application entière sans signature
+          # 3. LE COUP DE MÉDIATOR : Forcer le projet Xcode à cibler iOS 15.0 pour Firebase
+          # Cela modifie directement la configuration brute pour éviter les crashs de compilation
+          sed -i '' 's/IPHONEOS_DEPLOYMENT_TARGET = .*/IPHONEOS_DEPLOYMENT_TARGET = 15.0;/g' ios/Runner.xcodeproj/project.pbxproj
+          
+          # 4. Lancer la compilation officielle Flutter (génère le vrai bundle de l'app)
           flutter build ios --release --no-codesign
           
-          # 4. Créer la structure de dossier "Payload" réglementaire et exigée par AltStore
+          # 5. Préparer le dossier Payload réglementaire exigé par AltStore
+          rm -rf Payload
           mkdir -p Payload
           cp -r build/ios/iphoneos/Runner.app Payload/
           
-          # 5. Compresser le Payload pour générer le fichier .ipa final utilisable sur ton iPhone
+          # Afficher le contenu dans les logs Codemagic pour vérification visuelle
+          echo "=== VÉRIFICATION DU BUNDLE APP ==="
+          ls -l Payload/Runner.app
+          
+          # 6. Compresser le tout dans le fichier .ipa final
           mkdir -p output
+          rm -f output/VinylHube.ipa
           zip -r output/VinylHube.ipa Payload
 
     artifacts:
