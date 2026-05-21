@@ -8,15 +8,20 @@ workflows:
     scripts:
       - name: Build and Package IPA (Unsigned)
         script: |
-          # 1. Récupérer les packages (palette_generator, firebase, etc.)
+          # 1. Récupérer proprement tous les packages Dart (palette_generator, Firebase, etc.)
           flutter pub get
           
-          # 2. Laisser Flutter configurer iOS, créer le Podfile et compiler l'app en mode Release sans signature
+          # 2. Forcer la création/réparation du dossier iOS (indispensable quand on développe sur Windows)
+          flutter create --platforms=ios .
+          
+          # 3. Laisser Flutter configurer le Podfile et compiler l'application entière sans signature
           flutter build ios --release --no-codesign
           
-          # 3. Empaqueter le résultat pour AltStore / SideStore (.ipa)
+          # 4. Créer la structure de dossier "Payload" réglementaire et exigée par AltStore
           mkdir -p Payload
           cp -r build/ios/iphoneos/Runner.app Payload/
+          
+          # 5. Compresser le Payload pour générer le fichier .ipa final utilisable sur ton iPhone
           mkdir -p output
           zip -r output/VinylHube.ipa Payload
 
