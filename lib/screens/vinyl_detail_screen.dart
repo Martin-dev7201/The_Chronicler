@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:palette_generator/palette_generator.dart';
 import '../models/vinyl.dart';
+import '../services/vinyl_service.dart';
 import '../services/discogs_service.dart';
 
 class VinylDetailScreen extends StatefulWidget {
@@ -14,8 +16,10 @@ class VinylDetailScreen extends StatefulWidget {
 class _VinylDetailScreenState extends State<VinylDetailScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
+  final VinylService _vinylService = VinylService();
   List<DiscogsRelease> _suggestions = [];
   bool _loadingSuggestions = false;
+  Color _dominantColor = const Color(0xFF161616);
 
   @override
   void initState() {
@@ -25,12 +29,32 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
       duration: const Duration(seconds: 4),
     )..repeat();
     _loadSuggestions();
+    _extractColor();
   }
 
   @override
   void dispose() {
     _controller.dispose();
     super.dispose();
+  }
+
+  Future<void> _extractColor() async {
+    try {
+      final PaletteGenerator palette =
+          await PaletteGenerator.fromImageProvider(
+        NetworkImage(widget.vinyl.coverUrl),
+        maximumColorCount: 5,
+      );
+      if (mounted) {
+        setState(() {
+          _dominantColor = palette.darkMutedColor?.color ??
+              palette.dominantColor?.color ??
+              const Color(0xFF161616);
+        });
+      }
+    } catch (e) {
+      // Garde la couleur par défaut
+    }
   }
 
   Future<void> _loadSuggestions() async {
@@ -57,20 +81,24 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
     final discColor = _hexToColor(widget.vinyl.editionColor);
 
     return Scaffold(
-      backgroundColor: const Color(0xFF0f0f0f),
+      backgroundColor: _dominantColor,
       body: CustomScrollView(
         slivers: [
-          // ── 1. HEADER : DISQUE + POCHETTE ──────────────────────────────
           SliverAppBar(
             expandedHeight: 300,
-            backgroundColor: Colors.transparent,
+            backgroundColor: _dominantColor,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_back_ios, color: Colors.white),
+              icon: const Text('←',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold)),
               onPressed: () => Navigator.pop(context),
             ),
             actions: [
               IconButton(
-                icon: const Icon(Icons.delete_outline, color: Colors.white70),
+                icon: const Text('🗑️',
+                    style: TextStyle(fontSize: 20)),
                 onPressed: () => _confirmDelete(),
               ),
             ],
@@ -78,14 +106,21 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
               background: _buildHero(discColor),
             ),
           ),
-
-          // ── 2. BLOC INFOS (LOGO À DROITE) ──────────────────────────────
           SliverToBoxAdapter(
-            child: Container(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
               padding: const EdgeInsets.all(24),
-              decoration: const BoxDecoration(
-                color: Color(0xFF161616),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    _dominantColor,
+                    const Color(0xFF0f0f0f),
+                  ],
+                ),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(30)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +128,6 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Infos à gauche
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,48 +139,54 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
                                     fontWeight: FontWeight.w900)),
                             Text(widget.vinyl.artist,
                                 style: const TextStyle(
-                                    color: Colors.redAccent, 
+                                    color: Colors.redAccent,
                                     fontSize: 18,
                                     fontWeight: FontWeight.w500)),
                           ],
                         ),
                       ),
-                      // LOGO À DROITE (Ta demande)
                       if (widget.vinyl.artistLogoUrl.isNotEmpty)
                         ClipRRect(
                           borderRadius: BorderRadius.circular(12),
                           child: CachedNetworkImage(
                             imageUrl: widget.vinyl.artistLogoUrl,
-                            width: 60, height: 60, fit: BoxFit.cover,
+                            width: 60,
+                            height: 60,
+                            fit: BoxFit.cover,
                           ),
                         ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  _technicalRow(Icons.calendar_today, "Date", "${widget.vinyl.year}"),
-                  _technicalRow(Icons.music_note, "Genre", widget.vinyl.genre),
-                  _technicalRow(Icons.style, "Style", widget.vinyl.style),
-                  
+                  _technicalRow('📅', "Date", "${widget.vinyl.year}"),
+                  _technicalRow('🎵', "Genre", widget.vinyl.genre),
+                  _technicalRow('🎸', "Style", widget.vinyl.style),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 20),
                     child: Divider(color: Colors.white10),
                   ),
-
-                  // ── 3. TRACKLIST ───────────────────────────────────────
-                  const Text("TRACKLIST", 
-                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, letterSpacing: 2)),
+                  const Text("TRACKLIST",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 2)),
                   const SizedBox(height: 16),
-                  ...widget.vinyl.discs.expand((d) => d.tracks).map((t) => _buildTrackRow(t)),
-
+                  ...widget.vinyl.discs
+                      .expand((d) => d.tracks)
+                      .map((t) => _buildTrackRow(t)),
                   const SizedBox(height: 40),
-
-                  // ── 4. RECOMMANDATIONS ──────────────────────────────────
-                  const Text("DANS LE MÊME ESPRIT", 
-                    style: TextStyle(color: Colors.white38, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1.5)),
+                  const Text("DANS LE MÊME ESPRIT",
+                      style: TextStyle(
+                          color: Colors.white38,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.5)),
                   const SizedBox(height: 16),
-                  _loadingSuggestions 
-                    ? const Center(child: CircularProgressIndicator(color: Colors.redAccent))
-                    : _buildSuggestionsList(),
+                  _loadingSuggestions
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                              color: Colors.redAccent))
+                      : _buildSuggestionsList(),
                 ],
               ),
             ),
@@ -160,7 +200,6 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
     return Stack(
       alignment: Alignment.center,
       children: [
-        // DISQUE QUI TOURNE (Légèrement décalé à droite)
         Positioned(
           right: 30,
           child: RotationTransition(
@@ -168,19 +207,25 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
             child: _buildVinylDisc(discColor),
           ),
         ),
-        // POCHETTE
         Positioned(
           left: 40,
           child: Hero(
             tag: widget.vinyl.id,
             child: Container(
-              width: 200, height: 200,
+              width: 200,
+              height: 200,
               decoration: BoxDecoration(
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.5), blurRadius: 20, offset: const Offset(5, 5))],
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.5),
+                      blurRadius: 20,
+                      offset: const Offset(5, 5))
+                ],
               ),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(4),
-                child: CachedNetworkImage(imageUrl: widget.vinyl.coverUrl, fit: BoxFit.cover),
+                child: CachedNetworkImage(
+                    imageUrl: widget.vinyl.coverUrl, fit: BoxFit.cover),
               ),
             ),
           ),
@@ -191,25 +236,29 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
 
   Widget _buildVinylDisc(Color color) {
     return Container(
-      width: 210, height: 210,
+      width: 210,
+      height: 210,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
         color: color,
         border: Border.all(color: Colors.black, width: 2),
       ),
-      child: CustomPaint(painter: DiscPainter(Colors.black.withOpacity(0.3))),
+      child: CustomPaint(
+          painter: DiscPainter(Colors.black.withValues(alpha: 0.3))),
     );
   }
 
-  Widget _technicalRow(IconData icon, String label, String value) {
+  Widget _technicalRow(String emoji, String label, String value) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Icon(icon, size: 16, color: Colors.white38),
+          Text(emoji, style: const TextStyle(fontSize: 14)),
           const SizedBox(width: 8),
-          Text("$label : ", style: const TextStyle(color: Colors.white38)),
-          Text(value, style: const TextStyle(color: Colors.white70)),
+          Text("$label : ",
+              style: const TextStyle(color: Colors.white38)),
+          Text(value,
+              style: const TextStyle(color: Colors.white70)),
         ],
       ),
     );
@@ -220,23 +269,24 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
       padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
-          Text(track.id, style: const TextStyle(color: Colors.redAccent, fontWeight: FontWeight.bold, fontSize: 12)),
+          Text(track.id,
+              style: const TextStyle(
+                  color: Colors.redAccent,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12)),
           const SizedBox(width: 15),
-          Expanded(child: Text(track.title, style: const TextStyle(color: Colors.white, fontSize: 15))),
-          // Plateformes de streaming
-          if (track.spotify != null) _platformIcon('assets/spotify.png', Colors.green),
-          if (track.youtube != null) _platformIcon('assets/youtube.png', Colors.red),
+          Expanded(
+              child: Text(track.title,
+                  style: const TextStyle(
+                      color: Colors.white, fontSize: 15))),
+          if (track.spotify != null)
+            const Text('🎵',
+                style: TextStyle(fontSize: 16)),
+          if (track.youtube != null)
+            const Text('▶️',
+                style: TextStyle(fontSize: 16)),
         ],
       ),
-    );
-  }
-
-  Widget _platformIcon(String asset, Color color) {
-    return Container(
-      margin: const EdgeInsets.only(left: 8),
-      padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(shape: BoxShape.circle, color: color.withOpacity(0.1)),
-      child: Icon(Icons.play_circle_fill, size: 18, color: color),
     );
   }
 
@@ -256,10 +306,18 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: CachedNetworkImage(imageUrl: s.coverUrl, height: 120, width: 120, fit: BoxFit.cover),
+                  child: CachedNetworkImage(
+                      imageUrl: s.coverUrl,
+                      height: 120,
+                      width: 120,
+                      fit: BoxFit.cover),
                 ),
                 const SizedBox(height: 6),
-                Text(s.title, style: const TextStyle(color: Colors.white, fontSize: 11), maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(s.title,
+                    style: const TextStyle(
+                        color: Colors.white, fontSize: 11),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis),
               ],
             ),
           );
@@ -269,9 +327,38 @@ class _VinylDetailScreenState extends State<VinylDetailScreen>
   }
 
   void _confirmDelete() {
-    // Logique de suppression déjà vue précédemment
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: const Color(0xFF1a1a1a),
+        title: const Text('Supprimer ?',
+            style: TextStyle(color: Colors.white)),
+        content: Text(
+            'Supprimer "${widget.vinyl.title}" de ta collection ?',
+            style: const TextStyle(color: Colors.white54)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Annuler',
+                style: TextStyle(color: Colors.white38)),
+          ),
+          TextButton(
+            onPressed: () async {
+              await _vinylService.deleteVinyl(widget.vinyl.id);
+              if (mounted) {
+                Navigator.pop(ctx);
+                Navigator.pop(context);
+              }
+            },
+            child: const Text('Supprimer',
+                style: TextStyle(color: Colors.redAccent)),
+          ),
+        ],
+      ),
+    );
   }
 }
+
 class DiscPainter extends CustomPainter {
   final Color color;
   DiscPainter(this.color);
@@ -282,10 +369,8 @@ class DiscPainter extends CustomPainter {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0;
-
-    // Dessine les rainures du disque
     for (int i = 4; i < 15; i++) {
-      paint.color = color.withOpacity(0.05 + (i * 0.01));
+      paint.color = color.withValues(alpha: 0.05 + (i * 0.01));
       canvas.drawCircle(center, size.width / 2 - (i * 5), paint);
     }
   }

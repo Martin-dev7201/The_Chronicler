@@ -1,7 +1,7 @@
 name: The_chronicler
 description: "A new Flutter project."
 publish_to: 'none' 
-version: 1.0.0+1
+version: 1.0.0+2
 
 environment:
   sdk: ^3.11.4
@@ -18,16 +18,20 @@ dependencies:
   fl_chart: ^1.2.0
   share_plus: ^13.1.0
   google_fonts: ^8.1.0
-
+  palette_generator: ^0.3.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1 # Vérifie que cette ligne est là
+  flutter_launcher_icons: ^0.13.1
   
 flutter:
   uses-material-design: true
+  fonts:
+    - family: MaterialIcons
+      fonts:
+        - asset: assets/fonts/MaterialIcons-Regular.ttf
 
 flutter_launcher_icons:
   ios: true
-  image_path: "assets/app_icon.jpg" # Vérifie que ton image s'appelle bien comme ça
+  image_path: "assets/app_icon.jpg"
   remove_alpha_ios: true
