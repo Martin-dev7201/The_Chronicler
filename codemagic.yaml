@@ -6,36 +6,19 @@ workflows:
       xcode: latest
       cocoapods: default
     scripts:
-      - name: Setup
+      - name: Build and Package IPA (Unsigned)
         script: |
+          # 1. Récupérer les packages (palette_generator, firebase, etc.)
           flutter pub get
-          cd ios
-          rm -rf Pods Podfile.lock
-          # Forcer la plateforme iOS 15 dans le Podfile
-          sed -i '' "1s/^/platform :ios, '15.0'\n/" Podfile
-          pod install --repo-update
-
-      - name: Build and package
-        script: |
-          cd ios
-          xcodebuild \
-            -workspace Runner.xcworkspace \
-            -scheme Runner \
-            -configuration Release \
-            -archivePath /Users/builder/clone/ios/Runner.xcarchive \
-            -destination "generic/platform=iOS" \
-            CODE_SIGNING_ALLOWED=NO \
-            CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGN_IDENTITY="" \
-            archive
-
-          APP_PATH=$(find /Users/builder/clone/ios/Runner.xcarchive -name "Runner.app" -type d | head -1)
-          cd /Users/builder/clone
+          
+          # 2. Laisser Flutter configurer iOS, créer le Podfile et compiler l'app en mode Release sans signature
+          flutter build ios --release --no-codesign
+          
+          # 3. Empaqueter le résultat pour AltStore / SideStore (.ipa)
           mkdir -p Payload
-          cp -r "$APP_PATH" Payload/Runner.app
-          zip -r VinylHube.ipa Payload
+          cp -r build/ios/iphoneos/Runner.app Payload/
           mkdir -p output
-          cp VinylHube.ipa output/
+          zip -r output/VinylHube.ipa Payload
 
     artifacts:
       - output/VinylHube.ipa
