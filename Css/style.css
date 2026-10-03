@@ -580,3 +580,139 @@ svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
     min-height:390px;
   }
 }
+
+/* =========================================================
+   SÉLECTEUR D'ÉDITIONS DISCOGS
+   ========================================================= */
+
+.edition-sheet {
+  max-height: min(85vh, 800px);
+  overflow-y: auto;
+}
+
+.edition-results {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.edition-card {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  gap: 14px;
+  align-items: center;
+
+  padding: 10px;
+
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 16px;
+
+  background: rgba(255,255,255,.035);
+
+  color: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    transform .15s ease,
+    background .15s ease,
+    border-color .15s ease;
+}
+
+.edition-card:hover {
+  transform: translateY(-1px);
+
+  background:
+    rgba(255,255,255,.07);
+
+  border-color:
+    rgba(255,255,255,.16);
+}
+
+.edition-cover {
+  width: 64px;
+  height: 64px;
+
+  overflow: hidden;
+
+  border-radius: 10px;
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--a, #40121d),
+      var(--b, #120609)
+    );
+
+  flex-shrink: 0;
+}
+
+.edition-cover img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+
+  display: block;
+}
+
+.edition-cover-fallback {
+  width: 100%;
+  height: 100%;
+
+  display: grid;
+  place-items: center;
+
+  font-size: 9px;
+  letter-spacing: .12em;
+  opacity: .6;
+}
+
+.edition-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.edition-info strong {
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: 14px;
+}
+
+.edition-info span {
+  overflow: hidden;
+
+  white-space: nowrap;
+  text-overflow: ellipsis;
+
+  font-size: 11px;
+
+  opacity: .65;
+}
+
+.edition-arrow {
+  font-size: 28px;
+  opacity: .45;
+}
+
+@media (max-width: 600px) {
+
+  .edition-card {
+    grid-template-columns: 56px 1fr auto;
+  }
+
+  .edition-cover {
+    width: 56px;
+    height: 56px;
+  }
+
+}

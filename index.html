@@ -6,8 +6,9 @@
   <meta name="theme-color" content="#16060a">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <title>Vinyl Vault</title>
-  <link rel="stylesheet" href="style.css">
+  <title>The_Chronicler</title>
+  <link rel="stylesheet" href="Css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
   <div class="ambient" aria-hidden="true">
@@ -21,7 +22,7 @@
       <div class="brand">
         <span class="brand-record" aria-hidden="true"><i></i></span>
         <div class="brand-copy">
-          <strong>VINYL VAULT</strong>
+          <strong>THE_CHRONICLER</strong>
           <small>Ma collection</small>
         </div>
       </div>
@@ -91,7 +92,7 @@
     <nav class="tabbar glass" aria-label="Navigation principale">
       <div class="nav-brand">
         <span class="brand-record" aria-hidden="true"><i></i></span>
-        <span><strong>VINYL VAULT</strong><small>Bibliothèque personnelle</small></span>
+        <span><strong>THE_CHRONICLER</strong><small>Bibliothèque personnelle</small></span>
       </div>
 
       <button class="tab on" data-view="collection" data-label="Collection" aria-label="Collection">
@@ -131,6 +132,43 @@
       <div class="btns"><button type="button" class="pill" id="cancel">Annuler</button><button class="pill solid" id="ok">Ajouter</button></div>
     </form>
   </div>
+
+  <div class="scrim" id="editionSheet" hidden>
+    <div class="sheet glass-sheet edition-sheet">
+
+      <div class="grab"></div>
+
+      <div class="sheet-head">
+        <span class="sheet-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </span>
+
+        <div>
+          <small>Discogs</small>
+          <h2>Choisir l'édition</h2>
+        </div>
+      </div>
+
+      <p class="hint">
+        Plusieurs éditions correspondent à ta recherche.
+        Choisis celle qui correspond exactement à ton vinyle.
+      </p>
+
+      <div id="editionResults" class="edition-results"></div>
+
+      <div class="btns">
+        <button type="button" class="pill" id="editionCancel">
+          Annuler
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
 
   <div class="toast" id="toast" hidden></div>
   <script src="js/lookup.js"></script>

@@ -319,6 +319,320 @@ sheet.onclick = e => {
   }
 };
 
+/* =========================================================
+   SÉLECTION D'UNE ÉDITION DISCOGS
+   ========================================================= */
+
+const editionSheet =
+  $('#editionSheet');
+
+const editionResults =
+  $('#editionResults');
+
+const editionCancel =
+  $('#editionCancel');
+
+let pendingSearch = null;
+
+
+/* ---------------------------------------------------------
+   Fermer le sélecteur
+   --------------------------------------------------------- */
+
+function closeEditionSheet() {
+
+  editionSheet.hidden = true;
+
+  editionResults.innerHTML = '';
+
+  pendingSearch = null;
+}
+
+
+/* ---------------------------------------------------------
+   Affichage des résultats
+   --------------------------------------------------------- */
+
+function renderEditionResults(results) {
+
+  if (!results.length) {
+
+    editionResults.innerHTML = `
+      <div class="empty">
+        Aucune édition Discogs trouvée.
+      </div>
+    `;
+
+    return;
+  }
+
+  editionResults.innerHTML =
+    results.map((x, index) => {
+
+      const format =
+        Array.isArray(x.format)
+          ? x.format.join(', ')
+          : (x.format || '');
+
+      return `
+        <button
+          type="button"
+          class="edition-card"
+          data-release-id="${esc(x.id)}">
+
+          <div class="edition-cover">
+
+            ${
+              x.coverImage
+                ? `
+                  <img
+                    src="${esc(x.coverImage)}"
+                    alt=""
+                    loading="lazy">
+                `
+                : `
+                  <div class="edition-cover-fallback">
+                    <span>VINYL</span>
+                  </div>
+                `
+            }
+
+          </div>
+
+          <div class="edition-info">
+
+            <strong>
+              ${esc(x.title || 'Titre inconnu')}
+            </strong>
+
+            <span>
+              ${esc(x.year || 'Année inconnue')}
+              ${x.country ? ' · ' + esc(x.country) : ''}
+            </span>
+
+            <span>
+              ${esc(format || 'Format inconnu')}
+            </span>
+
+            ${
+              x.label
+                ? `
+                  <span>
+                    ${esc(x.label)}
+                    ${x.catno ? ' · ' + esc(x.catno) : ''}
+                  </span>
+                `
+                : ''
+            }
+
+            ${
+              x.barcode
+                ? `
+                  <span>
+                    EAN : ${esc(
+                      Array.isArray(x.barcode)
+                        ? x.barcode.join(', ')
+                        : x.barcode
+                    )}
+                  </span>
+                `
+                : ''
+            }
+
+          </div>
+
+          <span class="edition-arrow">
+            ›
+          </span>
+
+        </button>
+      `;
+
+    }).join('');
+}
+
+
+/* ---------------------------------------------------------
+   Cliquer sur une édition
+   --------------------------------------------------------- */
+
+editionResults.onclick = async e => {
+
+  const card =
+    e.target.closest(
+      '[data-release-id]'
+    );
+
+  if (!card) return;
+
+  const releaseId =
+    card.dataset.releaseId;
+
+  try {
+
+    editionResults.innerHTML = `
+      <div class="empty">
+        Chargement de l'édition…
+      </div>
+    `;
+
+    const release =
+      await getDiscogsRelease(
+        releaseId
+      );
+
+    const info =
+      normalizeRelease(
+        release
+      );
+
+    if (!info) {
+
+      toast(
+        'Impossible de récupérer cette édition'
+      );
+
+      return;
+    }
+
+    addSelectedRelease(
+      info,
+      pendingSearch
+    );
+
+    closeEditionSheet();
+
+  } catch (error) {
+
+    console.error(error);
+
+    toast(
+      'Erreur lors du chargement de l’édition'
+    );
+  }
+};
+
+
+/* ---------------------------------------------------------
+   Annulation
+   --------------------------------------------------------- */
+
+editionCancel.onclick =
+  closeEditionSheet;
+
+
+/* ---------------------------------------------------------
+   Ajout de l'édition choisie
+   --------------------------------------------------------- */
+
+function addSelectedRelease(
+  info,
+  formData
+) {
+
+  const artist =
+    info.artist ||
+    formData.artist;
+
+  const title =
+    info.title ||
+    formData.title;
+
+  if (!artist || !title) {
+
+    toast(
+      'Artiste et titre introuvables'
+    );
+
+    return;
+  }
+
+  items.unshift({
+
+    id:
+      'v' +
+      Date.now().toString(36),
+
+    artist,
+
+    title,
+
+    genre:
+      info.style ||
+      info.genre ||
+      formData.genre ||
+      '',
+
+    barcode:
+      info.barcode ||
+      formData.barcode ||
+      '',
+
+    year:
+      info.year ||
+      null,
+
+    cover:
+      info.cover ||
+      null,
+
+    discImage:
+      info.discImage ||
+      null,
+
+    discogsId:
+      info.discogsId ||
+      null,
+
+    masterId:
+      info.masterId ||
+      null,
+
+    country:
+      info.country ||
+      null,
+
+    label:
+      info.label ||
+      null,
+
+    catalogNumber:
+      info.catalogNumber ||
+      null,
+
+    format:
+      info.format ||
+      null,
+
+    vinylColor:
+      info.vinylColor ||
+      null,
+
+    added:
+      Date.now(),
+
+    plays:
+      0,
+
+    notes:
+      ''
+  });
+
+  save(
+    'vv_items',
+    items
+  );
+
+  $('#addf').reset();
+
+  sheet.hidden = true;
+
+  renderAll();
+
+  toast(
+    'Édition ajoutée à ta collection'
+  );
+}
 
 $('#addf').onsubmit = async e => {
 
@@ -327,7 +641,9 @@ $('#addf').onsubmit = async e => {
   const ok = $('#ok');
 
   ok.disabled = true;
-  ok.textContent = 'Recherche…';
+
+  ok.textContent =
+    'Recherche Discogs…';
 
   try {
 
@@ -336,85 +652,98 @@ $('#addf').onsubmit = async e => {
         .value
         .replace(/\D/g, '');
 
-    let artist = $('#f_ar').value.trim();
-    let title = $('#f_ti').value.trim();
+    const artist =
+      $('#f_ar')
+        .value
+        .trim();
 
-    let year = null;
-    let cover = null;
+    const title =
+      $('#f_ti')
+        .value
+        .trim();
 
-    const info = await findRelease({
-      barcode,
-      artist,
-      title
-    });
+    const genre =
+      $('#f_ge')
+        .value
+        .trim();
 
-    if (info) {
 
-      artist = artist || info.artist;
-      title = title || info.title;
-
-      year = info.year;
-      cover = info.cover;
-    }
-
-    if (!artist || !title) {
+    if (!barcode && (!artist || !title)) {
 
       toast(
-        barcode
-          ? 'Introuvable : saisis artiste et titre'
-          : 'Artiste et titre requis'
+        'Indique un code-barres ou artiste + titre'
       );
 
       return;
     }
 
-    items.unshift({
 
-      id:'v' + Date.now().toString(36),
+    const results =
+      await findReleases({
 
-      artist,
-      title,
+        barcode,
 
-      genre:$('#f_ge').value.trim(),
+        artist,
+
+        title
+
+      });
+
+
+    if (!results.length) {
+
+      toast(
+        'Aucune édition Discogs trouvée'
+      );
+
+      return;
+    }
+
+
+    /*
+      On mémorise les informations
+      du formulaire pendant que
+      l'utilisateur choisit son édition.
+    */
+
+    pendingSearch = {
 
       barcode,
-      year,
-      cover,
 
-      /*
-        Préparation Discogs :
-        ces champs seront remplis à l'étape suivante.
-      */
-      discImage:null,
-      discogsId:null,
-      masterId:null,
-      country:null,
-      label:null,
-      catalogNumber:null,
-      format:null,
-      vinylColor:null,
+      artist,
 
-      added:Date.now(),
+      title,
 
-      plays:0
-    });
+      genre
 
-    save('vv_items', items);
+    };
 
-    e.target.reset();
 
-    sheet.hidden = true;
+    renderEditionResults(
+      results
+    );
 
-    renderAll();
 
-    if (!cover) {
-      toast('Ajouté sans pochette');
-    }
+    editionSheet.hidden = false;
+
+
+  } catch (error) {
+
+    console.error(
+      'Recherche Discogs :',
+      error
+    );
+
+    toast(
+      'Erreur pendant la recherche Discogs'
+    );
 
   } finally {
 
     ok.disabled = false;
-    ok.textContent = 'Ajouter';
+
+    ok.textContent =
+      'Ajouter';
   }
 };
 
