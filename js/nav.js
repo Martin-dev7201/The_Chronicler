@@ -179,7 +179,7 @@ function sleeveStyle(x, size = 250) {
 
   if (
     x.cover &&
-    x.cover.startsWith(COVER_HOST)
+    /^https?:\/\//i.test(x.cover)
   ) {
     s +=
       `;--img:url(&quot;` +
