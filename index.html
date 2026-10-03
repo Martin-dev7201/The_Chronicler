@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#16060a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Vinyl Vault</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <span class="orb orb-a"></span>
+    <span class="orb orb-b"></span>
+    <span class="orb orb-c"></span>
+  </div>
+
+  <div class="app">
+    <header class="top glass">
+      <div class="brand">
+        <span class="brand-record" aria-hidden="true"><i></i></span>
+        <div class="brand-copy">
+          <strong>VINYL VAULT</strong>
+          <small>Ma collection</small>
+        </div>
+      </div>
+
+      <div class="page-title">
+        <span>Bibliothèque</span>
+        <h1 id="title">Récemment ajoutés</h1>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-btn glass-btn" aria-label="Thème">
+          <svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 0 18c1.5 0 2-1 1.4-2.1-.7-1.3.1-2.9 1.7-2.9H17a4 4 0 0 0 4-4c0-4.4-4-9-9-9z"/><circle cx="7.5" cy="11" r=".8"/><circle cx="10" cy="7.5" r=".8"/><circle cx="14.5" cy="7.5" r=".8"/></svg>
+        </button>
+        <button class="icon-btn glass-btn" aria-label="Tri et filtres">
+          <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main class="panel glass-panel">
+      <section id="v-collection" class="view on">
+        <div class="viewbar">
+          <div>
+            <span class="section-kicker">Collection</span>
+            <strong id="count"></strong>
+          </div>
+          <div class="layout glass-control" aria-label="Mode d'affichage">
+            <button data-layout="list" aria-label="Affichage en ligne"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+            <button data-layout="grid" aria-label="Affichage en grille"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg></button>
+          </div>
+        </div>
+        <ol class="list" id="list"></ol>
+      </section>
+      <section id="v-stats" class="view"></section>
+      <section id="v-wish" class="view"></section>
+    </main>
+
+    <section class="detail" id="detail" hidden>
+      <header class="top glass detail-top">
+        <button class="icon-btn glass-btn" id="d_back" aria-label="Retour"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <div class="page-title"><span>Collection</span><h1>Disque</h1></div>
+        <button class="icon-btn glass-btn danger" id="d_del" aria-label="Supprimer"><svg viewBox="0 0 24 24"><path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/></svg></button>
+      </header>
+      <main class="panel glass-panel detail-panel">
+        <div class="detail-layout">
+          <div class="hero" id="d_hero"></div>
+          <div class="detail-copy">
+            <h2 class="d-art" id="d_art"></h2>
+            <p class="d-tit" id="d_tit"></p>
+            <div class="playrow">
+              <button class="pill solid" id="d_play">▶ J'écoute</button>
+              <span><strong id="d_plays">0</strong> écoutes</span>
+            </div>
+            <dl class="meta">
+              <div><dt>Année</dt><dd><input id="d_year" inputmode="numeric" maxlength="4" placeholder="—"></dd></div>
+              <div><dt>Style</dt><dd><input id="d_genre" list="gl" placeholder="—" autocomplete="off"></dd></div>
+              <div><dt>Code-barres</dt><dd><input id="d_bc" inputmode="numeric" placeholder="—" autocomplete="off"></dd></div>
+              <div><dt>Ajouté le</dt><dd id="d_added">—</dd></div>
+            </dl>
+            <label class="nl" for="d_notes">Notes</label>
+            <textarea id="d_notes" rows="3" placeholder="Pressage, état de la pochette, souvenir…"></textarea>
+          </div>
+        </div>
+      </main>
+    </section>
+
+    <nav class="tabbar glass" aria-label="Navigation principale">
+      <div class="nav-brand">
+        <span class="brand-record" aria-hidden="true"><i></i></span>
+        <span><strong>VINYL VAULT</strong><small>Bibliothèque personnelle</small></span>
+      </div>
+
+      <button class="tab on" data-view="collection" data-label="Collection" aria-label="Collection">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg>
+      </button>
+      <button class="tab" data-view="stats" data-label="Statistiques" aria-label="Statistiques">
+        <svg viewBox="0 0 24 24"><path d="M5 20V11M12 20V4M19 20v-6"/></svg>
+      </button>
+      <span class="fab-gap" aria-hidden="true"></span>
+      <button class="tab" data-view="wish" data-label="Mes envies" aria-label="Liste d'envies">
+        <svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>
+      </button>
+      <button class="tab" id="share" data-label="Partager" aria-label="Partager">
+        <svg viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>
+      </button>
+      <button class="fab" data-label="Ajouter" aria-label="Ajouter un vinyle">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      </button>
+    </nav>
+  </div>
+
+  <div class="scrim" id="sheet" hidden>
+    <form class="sheet glass-sheet" id="addf">
+      <div class="grab"></div>
+      <div class="sheet-head">
+        <span class="sheet-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/></svg></span>
+        <div><small>Nouveau disque</small><h2>Ajouter un vinyle</h2></div>
+      </div>
+      <label>Code-barres<input id="f_bc" inputmode="numeric" placeholder="EAN / UPC" autocomplete="off"></label>
+      <div class="form-grid">
+        <label>Artiste<input id="f_ar" placeholder="Artiste" autocomplete="off"></label>
+        <label>Titre<input id="f_ti" placeholder="Titre" autocomplete="off"></label>
+      </div>
+      <label>Style<input id="f_ge" list="gl" placeholder="Rock, Jazz, House…" autocomplete="off"></label>
+      <datalist id="gl"></datalist>
+      <p class="hint">Avec un code-barres, artiste, titre et pochette sont recherchés automatiquement.</p>
+      <div class="btns"><button type="button" class="pill" id="cancel">Annuler</button><button class="pill solid" id="ok">Ajouter</button></div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+  <script src="js/lookup.js"></script>
+  <script src="js/nav.js"></script>
+</body>
+</html>
