@@ -79,6 +79,11 @@ const wishes = load('vv_wish', [
 
 let layout = load('vv_layout', 'list');
 
+let collectionSearch = '';
+
+let collectionSort =
+  load('vv_sort', 'recent');
+
 
 /* =========================================================
    CONSTANTES
@@ -190,15 +195,128 @@ function sleeveStyle(x, size = 250) {
   return s;
 }
 
+function getVisibleItems() {
+
+  const query =
+    collectionSearch
+      .trim()
+      .toLowerCase();
+
+  let visibleItems =
+    items.filter(x => {
+
+      if (!query) {
+        return true;
+      }
+
+      const artist =
+        String(x.artist || '')
+          .toLowerCase();
+
+      const title =
+        String(x.title || '')
+          .toLowerCase();
+
+      return (
+        artist.includes(query) ||
+        title.includes(query)
+      );
+    });
+
+
+  visibleItems =
+    [...visibleItems].sort((a, b) => {
+
+      if (collectionSort === 'artist') {
+
+        return String(a.artist || '')
+          .localeCompare(
+            String(b.artist || ''),
+            'fr'
+          );
+      }
+
+
+      if (collectionSort === 'title') {
+
+        return String(a.title || '')
+          .localeCompare(
+            String(b.title || ''),
+            'fr'
+          );
+      }
+
+
+      if (collectionSort === 'year-desc') {
+
+        return (
+          Number(b.year || 0) -
+          Number(a.year || 0)
+        );
+      }
+
+
+      if (collectionSort === 'year-asc') {
+
+        return (
+          Number(a.year || 9999) -
+          Number(b.year || 9999)
+        );
+      }
+
+
+      return (
+        Number(b.added || 0) -
+        Number(a.added || 0)
+      );
+    });
+
+
+  return visibleItems;
+}
 
 function renderList() {
+  const collectionSearchInput =
+  $('#collectionSearch');
+
+const collectionSortSelect =
+  $('#collectionSort');
+
+
+collectionSortSelect.value =
+  collectionSort;
+
+
+collectionSearchInput.oninput = e => {
+
+  collectionSearch =
+    e.target.value;
+
+  renderList();
+};
+
+
+collectionSortSelect.onchange = e => {
+
+  collectionSort =
+    e.target.value;
+
+  save(
+    'vv_sort',
+    collectionSort
+  );
+
+  renderList();
+};
+  const visibleItems =
+    getVisibleItems();
   $('#list').className =
     'list' + (layout === 'grid' ? ' grid' : '');
 
   $('#count').textContent =
-    items.length +
+    visibleItems.length +
     ' disque' +
-    (items.length > 1 ? 's' : '');
+    (visibleItems.length > 1 ? 's' : '');
 
   document
     .querySelectorAll('[data-layout]')
@@ -209,8 +327,8 @@ function renderList() {
       );
     });
 
-  $('#list').innerHTML = items.length
-    ? items.map((x, i) => `
+  $('#list').innerHTML = visibleItems.length
+    ? visibleItems.map((x, i) => `
       <li class="row" data-id="${esc(x.id)}">
 
         <span class="num">

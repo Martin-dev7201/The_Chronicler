@@ -54,6 +54,28 @@
             <button data-layout="grid" aria-label="Affichage en grille"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1"/><rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1"/></svg></button>
           </div>
         </div>
+        <div class="collection-tools">
+
+  <input
+    id="collectionSearch"
+    type="search"
+    placeholder="Rechercher un artiste ou un album…"
+    autocomplete="off"
+    aria-label="Rechercher dans la collection"
+  >
+
+  <select
+    id="collectionSort"
+    aria-label="Trier la collection"
+  >
+    <option value="recent">Ajout récent</option>
+    <option value="artist">Artiste A → Z</option>
+    <option value="title">Album A → Z</option>
+    <option value="year-desc">Année : récent → ancien</option>
+    <option value="year-asc">Année : ancien → récent</option>
+  </select>
+
+</div>
         <ol class="list" id="list"></ol>
       </section>
       <section id="v-stats" class="view"></section>
@@ -170,7 +192,6 @@
 
   <div class="toast" id="toast" hidden></div>
 
-  <div class="toast" id="toast" hidden></div>
   <script src="js/lookup.js"></script>
   <script src="js/nav.js"></script>
 </body>
