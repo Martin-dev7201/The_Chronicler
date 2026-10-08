@@ -17,7 +17,29 @@
     <span class="orb orb-c"></span>
   </div>
 
-  <div class="app">
+  <section class="auth-screen" id="authScreen" aria-labelledby="authTitle">
+    <div class="auth-card">
+      <div class="auth-brand" aria-hidden="true"><span class="auth-record"><i></i></span></div>
+      <div class="auth-heading">
+        <span>THE_CHRONICLER</span>
+        <h1 id="authTitle">Connexion</h1>
+        <p id="authSubtitle">Retrouve ta discothèque personnelle.</p>
+      </div>
+      <form class="auth-form" id="authForm">
+        <label for="authEmail">Adresse e-mail</label>
+        <input id="authEmail" type="email" autocomplete="email" placeholder="nom@exemple.fr" required>
+        <label for="authPassword">Mot de passe</label>
+        <input id="authPassword" type="password" autocomplete="current-password" placeholder="••••••••" minlength="6" required>
+        <p class="auth-message" id="authMessage" role="status" aria-live="polite"></p>
+        <button class="auth-submit" id="authSubmit" type="submit">Se connecter</button>
+      </form>
+      <button class="auth-switch" id="authSwitch" type="button">
+        Pas encore de compte ? <strong>Créer un compte</strong>
+      </button>
+    </div>
+  </section>
+
+  <div class="app" id="appShell" hidden>
     <header class="top glass">
       <div class="brand">
         <span class="brand-record" aria-hidden="true"><i></i></span>
@@ -38,6 +60,9 @@
         </button>
         <button class="icon-btn glass-btn" aria-label="Tri et filtres">
           <svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+        </button>
+        <button class="icon-btn glass-btn" id="logoutBtn" aria-label="Se déconnecter" title="Se déconnecter">
+          <svg viewBox="0 0 24 24"><path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4M14 8l4 4-4 4M18 12H9"/></svg>
         </button>
       </div>
     </header>
@@ -130,9 +155,13 @@
       <button class="tab" id="share" data-label="Partager" aria-label="Partager">
         <svg viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4M5 12v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7"/></svg>
       </button>
-      <button class="fab" data-label="Ajouter" aria-label="Ajouter un vinyle">
-        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+      <!-- Adaptation du bouton + de geekgao : https://uiverse.io/geekgao/little-mole-12 -->
+      <button type="button" class="fab" data-label="Ajouter" aria-label="Ajouter un vinyle" aria-controls="sheet">
+        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+        </svg>
       </button>
+
     </nav>
   </div>
 
@@ -152,6 +181,7 @@
       <datalist id="gl"></datalist>
       <p class="hint">Avec un code-barres, artiste, titre et pochette sont recherchés automatiquement.</p>
       <div class="btns"><button type="button" class="pill" id="cancel">Annuler</button><button class="pill solid" id="ok">Ajouter</button></div>
+      <span id="searchStatus" class="sr-only" role="status" aria-live="polite"></span>
     </form>
   </div>
 
@@ -193,6 +223,7 @@
   <div class="toast" id="toast" hidden></div>
 
   <script src="js/lookup.js"></script>
+  <script src="js/auth.js"></script>
   <script src="js/nav.js"></script>
 </body>
 </html>

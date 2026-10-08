@@ -758,10 +758,15 @@ $('#addf').onsubmit = async e => {
 
   const ok = $('#ok');
 
-  ok.disabled = true;
+  if (ok.disabled) return;
 
-  ok.textContent =
-    'Recherche Discogs…';
+  ok.disabled = true;
+  ok.setAttribute('aria-busy', 'true');
+  ok.setAttribute('aria-label', 'Recherche Discogs en cours');
+  // JkHuger / Uiverse : dix barres, avec des spans valides dans un bouton.
+  ok.innerHTML = '<span class="discogs-loader" aria-hidden="true">' +
+    '<span></span>'.repeat(10) + '</span>';
+  $('#searchStatus').textContent = 'Recherche Discogs en cours…';
 
   try {
 
@@ -859,9 +864,10 @@ $('#addf').onsubmit = async e => {
   } finally {
 
     ok.disabled = false;
-
-    ok.textContent =
-      'Ajouter';
+    ok.removeAttribute('aria-busy');
+    ok.removeAttribute('aria-label');
+    ok.textContent = 'Ajouter';
+    $('#searchStatus').textContent = '';
   }
 };
 
