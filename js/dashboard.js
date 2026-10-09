@@ -1,0 +1,23 @@
+const $d=s=>document.querySelector(s);
+const read=k=>{try{const v=JSON.parse(localStorage.getItem(k)||"[]");return Array.isArray(v)?v:[]}catch{return[]}};
+const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
+const items=read("vv_items"), wish=read("vv_wishlist").length?read("vv_wishlist"):(read("vv_wish").length?read("vv_wish"):read("vv_wants"));
+const genres=v=>Array.isArray(v)?v:String(v||"").split(/[,;/]/).map(x=>x.trim()).filter(Boolean);
+const counts=a=>{const m=new Map;a.filter(Boolean).forEach(x=>m.set(x,(m.get(x)||0)+1));return[...m].sort((a,b)=>b[1]-a[1])};
+$d("#statVinyls").textContent=items.length;
+$d("#statArtists").textContent=new Set(items.map(x=>(x.artist||"").toLowerCase()).filter(Boolean)).size;
+$d("#statGenres").textContent=new Set(items.flatMap(x=>genres(x.genre)).map(x=>x.toLowerCase())).size;
+$d("#statPlays").textContent=items.reduce((s,x)=>s+(Number(x.plays)||0),0);
+$d("#wishlistCount").textContent=wish.length;
+const recent=[...items].sort((a,b)=>new Date(b.added||0)-new Date(a.added||0)).slice(0,5);
+$d("#recentGrid").innerHTML=recent.length?recent.map(x=>`<a class="recent-card" href="vinyl.html?id=${encodeURIComponent(x.id??x.discogsId??"")}"><div class="recent-cover">${x.cover?`<img src="${esc(x.cover)}" alt="">`:`<div class="cover-placeholder">◎</div>`}</div><strong>${esc(x.title||"Sans titre")}</strong><span>${esc(x.artist||"Artiste inconnu")}</span></a>`).join(""):`<div class="mini-empty">Aucun vinyle pour le moment.</div>`;
+const gc=counts(items.flatMap(x=>genres(x.genre))).slice(0,6), gt=gc.reduce((s,x)=>s+x[1],0)||1;
+$d("#genreList").innerHTML=gc.length?gc.map(([g,n])=>{const p=Math.round(n/gt*100);return`<div class="genre-row"><div><strong>${esc(g)}</strong><span>${p}%</span></div><div class="genre-track"><i style="width:${p}%"></i></div></div>`}).join(""):`<div class="mini-empty">Pas encore de genres.</div>`;
+const ac=counts(items.map(x=>x.artist)).slice(0,5), max=ac[0]?.[1]||1;
+$d("#artistRanking").innerHTML=ac.length?ac.map(([a,n],i)=>`<div class="artist-row"><span>${String(i+1).padStart(2,"0")}</span><strong>${esc(a)}</strong><div class="artist-line"><i style="width:${Math.round(n/max*100)}%"></i></div><span>${n}</span></div>`).join(""):`<div class="mini-empty">Pas encore d'artistes.</div>`;
+$d("#dashboardDate").textContent=new Intl.DateTimeFormat("fr-FR",{weekday:"long",day:"numeric",month:"long",year:"numeric"}).format(new Date());
+const menu=$d("#accountMenu");$d("#accountButton").onclick=()=>menu.hidden=!menu.hidden;
+function account(s){const u=s?.user,n=u?.user_metadata?.display_name||u?.email?.split("@")[0];$d("#accountName").textContent=n||"Non connecté";$d("#accountEmail").textContent=u?.email||"Aucune session";$d("#accountStatus").textContent=u?"Connecté":"Hors ligne";$d("#avatarInitial").textContent=n?.[0]?.toUpperCase()||"?";$d(".status-dot").classList.toggle("online",!!u);if(n)$d("#welcomeName").textContent=n}
+supabaseClient.auth.getSession().then(({data})=>account(data.session));supabaseClient.auth.onAuthStateChange((_,s)=>account(s));
+$d("#logoutButton").onclick=async()=>{const{error}=await supabaseClient.auth.signOut();if(!error)location.href="index.html"};
+document.addEventListener("keydown",e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="k"){e.preventDefault();$d("#globalSearch").focus()}});
