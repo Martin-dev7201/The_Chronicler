@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Collection — THE_CHRONICLER</title>
+  <link rel="stylesheet" href="Css/v3.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="desktop-shell">
+    <aside class="sidebar">
+      <a class="brand" href="accueil.html" aria-label="THE_CHRONICLER">
+        <span class="brand-mark" aria-hidden="true"><i></i></span>
+        <span>THE_CHRONICLER</span>
+      </a>
+
+      <nav class="side-nav" aria-label="Navigation principale">
+        <a href="dashboard.html">
+          <span class="nav-icon">▦</span><span>Tableau de bord</span>
+        </a>
+        <a class="active" href="accueil.html">
+          <span class="nav-icon">◎</span><span>Collection</span>
+        </a>
+        <a href="wishlist.html">
+          <span class="nav-icon">♡</span><span>Liste d'envies</span>
+        </a>
+        <a href="communaute.html">
+          <span class="nav-icon">♙</span><span>Communauté</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <a class="secondary-link" href="profil.html">♙ <span>Profil</span></a>
+        <a class="secondary-link" href="parametres.html">⚙ <span>Paramètres</span></a>
+
+        <button class="account-card" id="accountButton" type="button">
+          <span class="avatar" id="avatarInitial">?</span>
+          <span class="account-copy">
+            <strong id="accountName">Connexion…</strong>
+            <small><i class="status-dot"></i><span id="accountStatus">Vérification</span></small>
+          </span>
+          <span class="account-more">•••</span>
+        </button>
+
+        <div class="account-menu" id="accountMenu" hidden>
+          <span id="accountEmail">—</span>
+          <a href="profil.html">Mon profil</a>
+          <a href="parametres.html">Paramètres</a>
+          <button id="logoutButton" type="button">Se déconnecter</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="global-search">
+          <span aria-hidden="true">⌕</span>
+          <input id="globalSearch" type="search"
+                 placeholder="Rechercher un album, artiste, label…"
+                 autocomplete="off">
+          <kbd>⌘ K</kbd>
+        </div>
+        <a class="add-button" href="index.html" title="Ajouter un vinyle">＋</a>
+      </header>
+
+      <section class="page">
+        <div class="page-heading">
+          <div>
+            <p class="eyebrow">BIBLIOTHÈQUE</p>
+            <h1>Ma collection</h1>
+            <p class="muted"><span id="vinylCount">0</span> vinyle(s) dans ta discothèque</p>
+          </div>
+          <div class="heading-actions">
+            <select id="sortSelect" aria-label="Trier la collection">
+              <option value="recent">Ajout récent</option>
+              <option value="artist">Artiste A–Z</option>
+              <option value="title">Album A–Z</option>
+              <option value="year-desc">Année ↓</option>
+              <option value="year-asc">Année ↑</option>
+            </select>
+            <button class="view-button active" type="button" title="Grille">▦</button>
+          </div>
+        </div>
+
+        <div class="collection-toolbar">
+          <div class="local-search">
+            <span>⌕</span>
+            <input id="collectionSearch" type="search" placeholder="Filtrer ma collection…">
+          </div>
+          <button class="filter-button" id="clearFilters" type="button">Effacer les filtres</button>
+        </div>
+
+        <div class="collection-grid" id="collectionGrid"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <span class="empty-record">◎</span>
+          <h2>Aucun vinyle trouvé</h2>
+          <p>Modifie ta recherche ou ajoute un nouveau disque à ta collection.</p>
+          <a href="index.html">Ajouter un vinyle</a>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/lookup.js"></script>
+  <script src="js/accueil.js"></script>
+</body>
+</html>
