@@ -1,15 +1,574 @@
 <!doctype html>
 <html lang="fr">
-    <head>
-        <meta charset="utf-8">
-        <title>Liste d’envies — THE_CHRONICLER</title>
-        <link rel="stylesheet" href="Css/v3.css">
-    </head>
-    <body>
-        <main style="padding:60px;color:#eee;font-family:system-ui;background:#0c0c0e;min-height:100vh">
-            <a href="accueil.html" style="color:#b05a70">← Collection</a>
-            <h1>Liste d’envies</h1>
-            <p style="color:#8e8b8c">Cette page arrive dans la prochaine étape de la V3 desktop.</p>
-        </main>
-    </body>
+
+<head>
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    Liste d'envies — THE_CHRONICLER
+  </title>
+
+  <link
+    rel="stylesheet"
+    href="Css/v3.css"
+  >
+
+  <!-- Librairie Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+
+<body>
+
+  <div class="desktop-shell">
+
+    <!-- ============================= -->
+    <!-- SIDEBAR                       -->
+    <!-- ============================= -->
+
+    <aside class="sidebar">
+      <a
+        class="brand"
+        href="accueil.html"
+      >
+        <span class="brand-mark">
+          <i></i>
+        </span>
+        <span>
+          THE_CHRONICLER
+        </span>
+      </a>
+
+      <!-- Navigation principale -->
+
+      <nav class="side-nav">
+        <a href="dashboard.html">
+          <span class="nav-icon">
+            ▦
+          </span>
+          <span>
+            Tableau de bord
+          </span>
+
+        </a>
+
+
+        <a href="accueil.html">
+
+          <span class="nav-icon">
+            ◎
+          </span>
+
+          <span>
+            Collection
+          </span>
+
+        </a>
+
+
+        <a
+          class="active"
+          href="wishlist.html"
+        >
+
+          <span class="nav-icon">
+            ♡
+          </span>
+
+          <span>
+            Liste d'envies
+          </span>
+
+        </a>
+
+
+        <a href="communaute.html">
+
+          <span class="nav-icon">
+            ♙
+          </span>
+
+          <span>
+            Communauté
+          </span>
+
+        </a>
+
+      </nav>
+
+
+      <!-- Bas de la sidebar -->
+
+      <div class="sidebar-bottom">
+
+        <a
+          class="secondary-link"
+          href="profil.html"
+        >
+          ♙
+          <span>Profil</span>
+        </a>
+
+
+        <a
+          class="secondary-link"
+          href="parametres.html"
+        >
+          ⚙
+          <span>Paramètres</span>
+        </a>
+
+
+        <!-- Compte connecté -->
+
+        <button
+          class="account-card"
+          id="accountButton"
+          type="button"
+        >
+
+          <span
+            class="avatar"
+            id="avatarInitial"
+          >
+            ?
+          </span>
+
+
+          <span class="account-copy">
+
+            <strong id="accountName">
+              Connexion…
+            </strong>
+
+            <small>
+
+              <i class="status-dot"></i>
+
+              <span id="accountStatus">
+                Vérification
+              </span>
+
+            </small>
+
+          </span>
+
+
+          <span class="account-more">
+            •••
+          </span>
+
+        </button>
+
+
+        <!-- Menu du compte -->
+
+        <div
+          class="account-menu"
+          id="accountMenu"
+          hidden
+        >
+
+          <span id="accountEmail">
+            —
+          </span>
+
+          <a href="profil.html">
+            Mon profil
+          </a>
+
+          <a href="parametres.html">
+            Paramètres
+          </a>
+
+          <button
+            id="logoutButton"
+            type="button"
+          >
+            Se déconnecter
+          </button>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+
+    <!-- ============================= -->
+    <!-- CONTENU PRINCIPAL             -->
+    <!-- ============================= -->
+
+    <main class="main">
+
+
+      <!-- Barre supérieure -->
+
+      <header class="topbar">
+
+        <div class="global-search">
+
+          <span>
+            ⌕
+          </span>
+
+          <input
+            id="globalSearch"
+            type="search"
+            placeholder="Rechercher un album, artiste, label…"
+            autocomplete="off"
+          >
+
+          <kbd>
+            ⌘ K
+          </kbd>
+
+        </div>
+
+
+        <!-- Ajouter à la wishlist -->
+
+        <button
+          class="add-button"
+          id="openWishModal"
+          type="button"
+          title="Ajouter à la liste d'envies"
+        >
+          ＋
+        </button>
+
+      </header>
+
+
+      <!-- ============================= -->
+      <!-- WISHLIST                      -->
+      <!-- ============================= -->
+
+      <section class="page">
+
+
+        <!-- Titre -->
+
+        <div class="page-heading">
+
+          <div>
+
+            <p class="eyebrow">
+              À TROUVER
+            </p>
+
+            <h1>
+              Liste d'envies
+            </h1>
+
+            <p class="muted">
+
+              <span id="wishCount">
+                0
+              </span>
+
+              vinyle(s) à rechercher
+
+            </p>
+
+          </div>
+
+
+          <!-- Tri -->
+
+          <div class="heading-actions">
+
+            <select
+              id="wishSort"
+              aria-label="Trier la liste d'envies"
+            >
+
+              <option value="recent">
+                Ajout récent
+              </option>
+
+              <option value="artist">
+                Artiste A–Z
+              </option>
+
+              <option value="title">
+                Album A–Z
+              </option>
+
+              <option value="year-desc">
+                Année ↓
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <!-- Recherche -->
+
+        <div class="wishlist-toolbar">
+
+          <div class="local-search">
+
+            <span>
+              ⌕
+            </span>
+
+            <input
+              id="wishSearch"
+              type="search"
+              placeholder="Filtrer ma liste d'envies…"
+            >
+
+          </div>
+
+
+          <div class="wishlist-summary">
+
+            <span id="visibleWishCount">
+              0
+            </span>
+
+            affiché(s)
+
+          </div>
+
+        </div>
+
+
+        <!-- Les cartes sont créées par wishlist.js -->
+
+        <div
+          class="wishlist-grid"
+          id="wishlistGrid"
+        >
+        </div>
+
+
+        <!-- Wishlist vide -->
+
+        <div
+          class="empty-state"
+          id="wishlistEmpty"
+          hidden
+        >
+
+          <span class="empty-record">
+            ♡
+          </span>
+
+          <h2>
+            Ta liste d'envies est vide
+          </h2>
+
+          <p>
+            Ajoute les albums que tu aimerais
+            trouver en vinyle.
+          </p>
+
+          <button
+            id="emptyAddWish"
+            type="button"
+          >
+            Ajouter un album
+          </button>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+
+  <!-- ================================= -->
+  <!-- FENÊTRE AJOUT WISHLIST             -->
+  <!-- ================================= -->
+
+  <div
+    class="wish-modal-backdrop"
+    id="wishModal"
+    hidden
+  >
+
+    <section
+      class="wish-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="wishModalTitle"
+    >
+
+
+      <!-- En-tête fenêtre -->
+
+      <div class="wish-modal-head">
+
+        <div>
+
+          <p class="eyebrow">
+            LISTE D'ENVIES
+          </p>
+
+          <h2 id="wishModalTitle">
+            Ajouter un vinyle
+          </h2>
+
+        </div>
+
+
+        <button
+          id="closeWishModal"
+          type="button"
+          aria-label="Fermer"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- Formulaire -->
+
+      <form id="wishForm">
+
+
+        <!-- Artiste -->
+
+        <label>
+
+          Artiste
+
+          <input
+            id="wishArtist"
+            required
+            placeholder="Ex. Pink Floyd"
+          >
+
+        </label>
+
+
+        <!-- Album -->
+
+        <label>
+
+          Album
+
+          <input
+            id="wishTitle"
+            required
+            placeholder="Ex. Wish You Were Here"
+          >
+
+        </label>
+
+
+        <!-- Année + Genre -->
+
+        <div class="wish-form-row">
+
+
+          <label>
+
+            Année
+
+            <input
+              id="wishYear"
+              type="number"
+              min="1900"
+              max="2100"
+              placeholder="1975"
+            >
+
+          </label>
+
+
+          <label>
+
+            Genre
+
+            <input
+              id="wishGenre"
+              placeholder="Rock"
+            >
+
+          </label>
+
+        </div>
+
+
+        <!-- Pochette -->
+
+        <label>
+
+          URL de la pochette
+
+          <input
+            id="wishCover"
+            type="url"
+            placeholder="https://…"
+          >
+
+        </label>
+
+
+        <!-- Note -->
+
+        <label>
+
+          Note
+
+          <textarea
+            id="wishNote"
+            rows="3"
+            placeholder="Édition recherchée, couleur, budget…"
+          ></textarea>
+
+        </label>
+
+
+        <!-- Boutons -->
+
+        <div class="wish-form-actions">
+
+          <button
+            type="button"
+            id="cancelWish"
+          >
+            Annuler
+          </button>
+
+
+          <button
+            class="primary"
+            type="submit"
+          >
+            Ajouter à ma liste
+          </button>
+
+        </div>
+
+      </form>
+
+    </section>
+
+  </div>
+
+
+  <!-- ================================= -->
+  <!-- JAVASCRIPT                        -->
+  <!-- ================================= -->
+
+  <script src="js/lookup.js"></script>
+
+  <script src="js/wishlist.js"></script>
+
+</body>
+
 </html>
