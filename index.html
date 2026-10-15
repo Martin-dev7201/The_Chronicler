@@ -5,28 +5,47 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#0c0c0e">
   <title>THE_CHRONICLER</title>
+
+  <link rel="stylesheet" href="Css/Loading.css">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    *{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#0c0c0e;color:#f1efed;font-family:Inter,Arial,sans-serif}body{min-height:100vh;display:grid;place-items:center}.loader{display:grid;place-items:center;gap:16px;color:#777478;font-size:11px}.record{position:relative;width:44px;height:44px;border-radius:50%;background:repeating-radial-gradient(circle,#242327 0 2px,#0c0c0e 3px 5px);border:1px solid #343238;animation:spin 1.8s linear infinite}.record:before{content:"";position:absolute;inset:13px;border-radius:50%;background:#8e2f48}.record:after{content:"";position:absolute;inset:20px;border-radius:50%;background:#0c0c0e}@keyframes spin{to{transform:rotate(360deg)}}
-  </style>
 </head>
+
 <body>
-  <div class="loader">
-    <div class="record"></div>
-    <span>Chargement de THE_CHRONICLER…</span>
+  <div class="terminal-loader">
+    <div class="terminal-header">
+      <div class="terminal-title">Status</div>
+
+      <div class="terminal-controls">
+        <div class="control close"></div>
+        <div class="control minimize"></div>
+        <div class="control maximize"></div>
+      </div>
+    </div>
+
+    <div class="text">Loading...</div>
   </div>
+
   <script src="js/lookup.js"></script>
+
   <script>
-    (async function(){
-      try{
-        const {data,error}=await supabaseClient.auth.getSession();
-        if(error || !data.session){
+    (async function () {
+      try {
+        const { data, error } = await supabaseClient.auth.getSession();
+
+        if (error) {
+          console.error('Erreur session :', error);
           location.replace('connexion.html');
           return;
         }
+
+        if (!data.session) {
+          location.replace('connexion.html');
+          return;
+        }
+
         location.replace('dashboard.html');
-      }catch(error){
-        console.error('Erreur session :',error);
+      } catch (error) {
+        console.error('Erreur session :', error);
         location.replace('connexion.html');
       }
     })();
