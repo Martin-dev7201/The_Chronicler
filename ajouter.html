@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Ajouter un vinyle — THE_CHRONICLER</title>
+  <link rel="stylesheet" href="Css/v3.css">
+  <link rel="stylesheet" href="Css/ajouter.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="desktop-shell">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.html"><span class="brand-mark"><i></i></span><span>THE_CHRONICLER</span></a>
+    <nav class="side-nav">
+      <a href="dashboard.html"><span class="nav-icon">▦</span><span>Tableau de bord</span></a>
+      <a class="active" href="accueil.html"><span class="nav-icon">◎</span><span>Collection</span></a>
+      <a href="wishlist.html"><span class="nav-icon">♡</span><span>Liste d'envies</span></a>
+      <a href="communaute.html"><span class="nav-icon">♙</span><span>Communauté</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a class="secondary-link" href="profil.html">♙ <span>Profil</span></a>
+      <a class="secondary-link" href="parametres.html">⚙ <span>Paramètres</span></a>
+      <button class="account-card" id="accountButton" type="button">
+        <span class="avatar" id="avatarInitial">?</span>
+        <span class="account-copy"><strong id="accountName">Connexion…</strong><small><i class="status-dot"></i><span id="accountStatus">Vérification</span></small></span>
+        <span class="account-more">•••</span>
+      </button>
+      <div class="account-menu" id="accountMenu" hidden>
+        <span id="accountEmail">—</span>
+        <a href="profil.html">Mon profil</a>
+        <a href="parametres.html">Paramètres</a>
+        <button id="logoutButton" type="button">Se déconnecter</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <a class="add-back" href="accueil.html">← Retour à la collection</a>
+      <span class="add-top-title">AJOUTER UN VINYLE</span>
+    </header>
+
+    <section class="page add-page">
+      <div class="add-heading">
+        <p class="eyebrow">DISCOGS</p>
+        <h1>Ajouter un vinyle</h1>
+        <p>Recherche ton édition sur Discogs, puis ajoute-la à ta collection.</p>
+      </div>
+
+      <section class="add-search-panel">
+        <div class="add-section-title">
+          <span>01</span>
+          <div><strong>Rechercher une édition</strong><small>Utilise le code-barres ou l'artiste et le titre.</small></div>
+        </div>
+
+        <form id="releaseSearchForm" class="release-search-form">
+          <label><span>Code-barres</span><input id="addBarcode" type="text" inputmode="numeric" autocomplete="off" placeholder="Ex. 093624888653"></label>
+          <div class="add-or"><span></span><small>OU</small><span></span></div>
+          <div class="add-search-row">
+            <label><span>Artiste</span><input id="addArtist" type="text" autocomplete="off" placeholder="Red Hot Chili Peppers"></label>
+            <label><span>Album</span><input id="addTitle" type="text" autocomplete="off" placeholder="Unlimited Love"></label>
+          </div>
+          <div class="add-form-actions">
+            <button type="button" class="add-secondary" id="clearSearchButton">Effacer</button>
+            <button type="submit" class="add-primary" id="searchButton">Rechercher sur Discogs</button>
+          </div>
+        </form>
+      </section>
+
+      <div class="add-message" id="addMessage" hidden></div>
+
+      <section class="add-results-section" id="resultsSection" hidden>
+        <div class="add-results-heading">
+          <div><p class="eyebrow">RÉSULTATS</p><h2>Choisir l'édition</h2></div>
+          <span id="resultCount">0 résultat</span>
+        </div>
+        <div class="release-results" id="releaseResults"></div>
+      </section>
+
+      <section class="add-initial-state" id="initialState">
+        <div class="add-record"><i></i></div>
+        <h2>Trouve ton pressage</h2>
+        <p>Chaque édition Discogs possède ses propres informations : année, pays, label, couleur, numéro de catalogue et pochette.</p>
+      </section>
+    </section>
+  </main>
+</div>
+<script src="js/lookup.js"></script>
+<script src="js/ajouter.js"></script>
+</body>
+</html>

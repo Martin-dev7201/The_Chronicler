@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="fr">
+
+<head>
+
+  <meta charset="utf-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1"
+  >
+
+  <title>
+    Connexion — THE_CHRONICLER
+  </title>
+
+  <!-- Design général V3 -->
+  <link
+    rel="stylesheet"
+    href="Css/v3.css"
+  >
+
+  <!-- Design spécifique connexion -->
+  <link
+    rel="stylesheet"
+    href="Css/auth.css"
+  >
+
+  <!-- Supabase -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+</head>
+
+
+<body class="auth-body">
+
+
+  <main class="auth-layout">
+
+
+    <!-- ====================================== -->
+    <!-- PARTIE GAUCHE                         -->
+    <!-- ====================================== -->
+
+    <section class="auth-showcase">
+
+
+      <!-- Logo -->
+
+      <a
+        class="auth-logo"
+        href="connexion.html"
+      >
+
+        <span class="auth-logo-record">
+          <i></i>
+        </span>
+
+        <span>
+          THE_CHRONICLER
+        </span>
+
+      </a>
+
+
+      <!-- Présentation -->
+
+      <div class="auth-showcase-content">
+
+
+        <p class="auth-kicker">
+          BIBLIOTHÈQUE PERSONNELLE
+        </p>
+
+
+        <h1>
+
+          Ta collection.<br>
+
+          <span>
+            Ton histoire.
+          </span>
+
+        </h1>
+
+
+        <p class="auth-intro">
+
+          Archive tes vinyles, retrouve tes éditions,
+          suis tes écoutes et construis une véritable
+          chronique de ta collection.
+
+        </p>
+
+
+        <!-- Quelques fonctions -->
+
+        <div class="auth-features">
+
+
+          <div class="auth-feature">
+
+            <span class="auth-feature-icon">
+              ◎
+            </span>
+
+            <div>
+
+              <strong>
+                Collection
+              </strong>
+
+              <small>
+                Organise tous tes vinyles
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="auth-feature">
+
+            <span class="auth-feature-icon">
+              ♡
+            </span>
+
+            <div>
+
+              <strong>
+                Liste d'envies
+              </strong>
+
+              <small>
+                Garde une trace de tes recherches
+              </small>
+
+            </div>
+
+          </div>
+
+
+          <div class="auth-feature">
+
+            <span class="auth-feature-icon">
+              ▦
+            </span>
+
+            <div>
+
+              <strong>
+                Statistiques
+              </strong>
+
+              <small>
+                Découvre ta collection autrement
+              </small>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- Vinyle décoratif -->
+
+      <div
+        class="auth-vinyl-decoration"
+        aria-hidden="true"
+      >
+
+        <div class="auth-vinyl-disc">
+
+          <span></span>
+
+        </div>
+
+      </div>
+
+
+      <!-- Bas de page -->
+
+      <p class="auth-showcase-footer">
+
+        Chronicle your records.
+
+      </p>
+
+    </section>
+
+
+
+    <!-- ====================================== -->
+    <!-- PARTIE DROITE                         -->
+    <!-- ====================================== -->
+
+    <section class="auth-panel">
+
+
+      <div class="auth-box">
+
+
+        <!-- En-tête -->
+
+        <div class="auth-heading">
+
+
+          <p class="auth-kicker">
+            THE_CHRONICLER
+          </p>
+
+
+          <h2 id="authTitle">
+            Bon retour.
+          </h2>
+
+
+          <p id="authSubtitle">
+
+            Connecte-toi pour accéder à ta collection.
+
+          </p>
+
+        </div>
+
+
+
+        <!-- ================================== -->
+        <!-- ONGLETS                            -->
+        <!-- ================================== -->
+
+        <div
+          class="auth-tabs"
+          role="tablist"
+        >
+
+
+          <button
+            class="auth-tab active"
+            id="loginTab"
+            type="button"
+          >
+
+            Connexion
+
+          </button>
+
+
+          <button
+            class="auth-tab"
+            id="signupTab"
+            type="button"
+          >
+
+            Créer un compte
+
+          </button>
+
+        </div>
+
+
+
+        <!-- ================================== -->
+        <!-- FORMULAIRE                         -->
+        <!-- ================================== -->
+
+        <form
+          class="auth-form"
+          id="authForm"
+        >
+
+
+          <!-- NOM : uniquement inscription -->
+
+          <div
+            class="auth-field"
+            id="displayNameField"
+            hidden
+          >
+
+            <label for="displayName">
+
+              Nom d'utilisateur
+
+            </label>
+
+
+            <input
+              id="displayName"
+              type="text"
+              maxlength="40"
+              autocomplete="nickname"
+              placeholder="Ex. Martin"
+            >
+
+          </div>
+
+
+
+          <!-- EMAIL -->
+
+          <div class="auth-field">
+
+            <label for="authEmail">
+
+              Adresse e-mail
+
+            </label>
+
+
+            <input
+              id="authEmail"
+              type="email"
+              autocomplete="email"
+              placeholder="nom@exemple.fr"
+              required
+            >
+
+          </div>
+
+
+
+          <!-- MOT DE PASSE -->
+
+          <div class="auth-field">
+
+            <label for="authPassword">
+
+              Mot de passe
+
+            </label>
+
+
+            <input
+              id="authPassword"
+              type="password"
+              autocomplete="current-password"
+              minlength="6"
+              placeholder="••••••••"
+              required
+            >
+
+
+            <small
+              class="auth-password-hint"
+              id="passwordHint"
+              hidden
+            >
+
+              Minimum 6 caractères.
+
+            </small>
+
+          </div>
+
+
+
+          <!-- CONFIRMATION MOT DE PASSE -->
+
+          <div
+            class="auth-field"
+            id="confirmPasswordField"
+            hidden
+          >
+
+            <label for="authPasswordConfirm">
+
+              Confirmer le mot de passe
+
+            </label>
+
+
+            <input
+              id="authPasswordConfirm"
+              type="password"
+              autocomplete="new-password"
+              minlength="6"
+              placeholder="••••••••"
+            >
+
+          </div>
+
+
+
+          <!-- MESSAGE -->
+
+          <div
+            class="auth-message"
+            id="authMessage"
+            role="status"
+            aria-live="polite"
+            hidden
+          >
+          </div>
+
+
+
+          <!-- BOUTON -->
+
+          <button
+            class="auth-submit"
+            id="authSubmit"
+            type="submit"
+          >
+
+            Se connecter
+
+          </button>
+
+        </form>
+
+
+
+        <!-- Bas formulaire -->
+
+        <p class="auth-switch-text">
+
+          <span id="authSwitchText">
+
+            Pas encore de compte ?
+
+          </span>
+
+
+          <button
+            id="authSwitch"
+            type="button"
+          >
+
+            Créer un compte
+
+          </button>
+
+        </p>
+
+
+
+        <div class="auth-security">
+
+          <span>
+            ◉
+          </span>
+
+          <p>
+
+            Connexion sécurisée avec
+            <strong>Supabase Auth</strong>.
+
+          </p>
+
+        </div>
+
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- ====================================== -->
+  <!-- JAVASCRIPT                             -->
+  <!-- ====================================== -->
+
+  <!--
+    lookup.js crée actuellement
+    notre supabaseClient.
+  -->
+
+  <script src="js/lookup.js"></script>
+
+
+  <!-- Gestion connexion / inscription -->
+
+  <script src="js/auth.js"></script>
+
+
+</body>
+
+</html>

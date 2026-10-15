@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Liste d'envies — THE_CHRONICLER</title>
+  <link rel="stylesheet" href="Css/v3.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="desktop-shell">
+  <aside class="sidebar">
+    <a class="brand" href="accueil.html"><span class="brand-mark"><i></i></span><span>THE_CHRONICLER</span></a>
+    <nav class="side-nav">
+      <a href="dashboard.html"><span class="nav-icon">▦</span><span>Tableau de bord</span></a>
+      <a href="accueil.html"><span class="nav-icon">◎</span><span>Collection</span></a>
+      <a class="active" href="wishlist.html"><span class="nav-icon">♡</span><span>Liste d'envies</span></a>
+      <a href="communaute.html"><span class="nav-icon">♙</span><span>Communauté</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a class="secondary-link" href="profil.html">♙ <span>Profil</span></a>
+      <a class="secondary-link" href="parametres.html">⚙ <span>Paramètres</span></a>
+      <button class="account-card" id="accountButton">
+        <span class="avatar" id="avatarInitial">?</span>
+        <span class="account-copy"><strong id="accountName">Connexion…</strong><small><i class="status-dot"></i><span id="accountStatus">Vérification</span></small></span>
+        <span class="account-more">•••</span>
+      </button>
+      <div class="account-menu" id="accountMenu" hidden>
+        <span id="accountEmail">—</span><a href="profil.html">Mon profil</a><a href="parametres.html">Paramètres</a>
+        <button id="logoutButton">Se déconnecter</button>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="global-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Rechercher un album, artiste, label…"><kbd>⌘ K</kbd></div>
+      <button class="add-button" id="openWishModal" title="Ajouter à la liste d'envies">＋</button>
+    </header>
+
+    <section class="page">
+      <div class="page-heading">
+        <div><p class="eyebrow">À TROUVER</p><h1>Liste d'envies</h1><p class="muted"><span id="wishCount">0</span> vinyle(s) à rechercher</p></div>
+        <div class="heading-actions">
+          <select id="wishSort"><option value="recent">Ajout récent</option><option value="artist">Artiste A–Z</option><option value="title">Album A–Z</option><option value="year-desc">Année ↓</option></select>
+        </div>
+      </div>
+
+      <div class="wishlist-toolbar">
+        <div class="local-search"><span>⌕</span><input id="wishSearch" type="search" placeholder="Filtrer ma liste d'envies…"></div>
+        <div class="wishlist-summary"><span id="visibleWishCount">0</span> affiché(s)</div>
+      </div>
+
+      <div class="wishlist-grid" id="wishlistGrid"></div>
+
+      <div class="empty-state" id="wishlistEmpty" hidden>
+        <span class="empty-record">♡</span><h2>Ta liste d'envies est vide</h2>
+        <p>Ajoute les albums que tu aimerais trouver en vinyle.</p>
+        <button id="emptyAddWish">Ajouter un album</button>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="wish-modal-backdrop" id="wishModal" hidden>
+  <section class="wish-modal" role="dialog" aria-modal="true" aria-labelledby="wishModalTitle">
+    <div class="wish-modal-head"><div><p class="eyebrow">LISTE D'ENVIES</p><h2 id="wishModalTitle">Ajouter un vinyle</h2></div><button id="closeWishModal">×</button></div>
+    <form id="wishForm">
+      <label>Artiste <input id="wishArtist" required placeholder="Ex. Pink Floyd"></label>
+      <label>Album <input id="wishTitle" required placeholder="Ex. Wish You Were Here"></label>
+      <div class="wish-form-row">
+        <label>Année <input id="wishYear" type="number" min="1900" max="2100" placeholder="1975"></label>
+        <label>Genre <input id="wishGenre" placeholder="Rock"></label>
+      </div>
+      <label>URL de la pochette <input id="wishCover" type="url" placeholder="https://…"></label>
+      <label>Note <textarea id="wishNote" rows="3" placeholder="Édition recherchée, couleur, budget…"></textarea></label>
+      <div class="wish-form-actions"><button type="button" id="cancelWish">Annuler</button><button class="primary" type="submit">Ajouter à ma liste</button></div>
+    </form>
+  </section>
+</div>
+
+<script src="js/lookup.js"></script>
+<script src="js/session-guard.js"></script>
+<script src="js/wishlist.js"></script>
+</body></html>

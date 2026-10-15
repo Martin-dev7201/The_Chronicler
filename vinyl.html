@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Vinyle — THE_CHRONICLER</title>
+  <link rel="stylesheet" href="Css/v3.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<div class="desktop-shell">
+  <aside class="sidebar">
+    <a class="brand" href="accueil.html"><span class="brand-mark"><i></i></span><span>THE_CHRONICLER</span></a>
+    <nav class="side-nav">
+      <a href="dashboard.html"><span class="nav-icon">▦</span><span>Tableau de bord</span></a>
+      <a class="active" href="accueil.html"><span class="nav-icon">◎</span><span>Collection</span></a>
+      <a href="wishlist.html"><span class="nav-icon">♡</span><span>Liste d'envies</span></a>
+      <a href="communaute.html"><span class="nav-icon">♙</span><span>Communauté</span></a>
+    </nav>
+    <div class="sidebar-bottom">
+      <a class="secondary-link" href="profil.html">♙ <span>Profil</span></a>
+      <a class="secondary-link" href="parametres.html">⚙ <span>Paramètres</span></a>
+      <button class="account-card" id="accountButton" type="button"><span class="avatar" id="avatarInitial">?</span><span class="account-copy"><strong id="accountName">Connexion…</strong><small><i class="status-dot"></i><span id="accountStatus">Vérification</span></small></span><span class="account-more">•••</span></button>
+      <div class="account-menu" id="accountMenu" hidden><span id="accountEmail">—</span><a href="profil.html">Mon profil</a><a href="parametres.html">Paramètres</a><button id="logoutButton" type="button">Se déconnecter</button></div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div class="global-search"><span>⌕</span><input id="globalSearch" type="search" placeholder="Rechercher un album, artiste, label…"><kbd>⌘ K</kbd></div>
+      <a class="add-button" href="ajouter.html" title="Ajouter un vinyle">＋</a>
+    </header>
+
+    <section class="page vinyl-page" id="vinylPage" hidden>
+      <a class="back-link" href="accueil.html">← Retour à la collection</a>
+
+      <div class="vinyl-hero">
+        <div class="vinyl-visual">
+          <div class="vinyl-disc" id="vinylDisc"><span></span></div>
+          <div class="vinyl-cover-large" id="vinylCover"></div>
+        </div>
+
+        <div class="vinyl-intro">
+          <div class="vinyl-title-line">
+            <div><p class="eyebrow" id="vinylFormat">VINYLE</p><h1 id="vinylTitle">—</h1><a id="vinylArtist" class="vinyl-artist" href="#">—</a></div>
+            <button class="more-button" type="button" title="Plus d'options">•••</button>
+          </div>
+
+          <div class="vinyl-tags" id="vinylTags"></div>
+          <p class="vinyl-description" id="vinylNotes" hidden></p>
+          <img class="artist-logo" id="artistLogo" alt="Logo de l'artiste" hidden>
+
+          <dl class="edition-grid">
+            <div><dt>Année</dt><dd id="vinylYear">—</dd></div>
+            <div><dt>Pays</dt><dd id="vinylCountry">—</dd></div>
+            <div><dt>Label</dt><dd id="vinylLabel">—</dd></div>
+            <div><dt>Catalogue</dt><dd id="vinylCatalog">—</dd></div>
+            <div><dt>Format</dt><dd id="vinylEditionFormat">—</dd></div>
+            <div><dt>Couleur</dt><dd id="vinylColor">—</dd></div>
+          </dl>
+
+          <div class="plays-box"><div><span>ÉCOUTES</span><strong id="vinylPlays">0</strong></div><button id="addPlay" type="button">+ Ajouter une écoute</button></div>
+        </div>
+      </div>
+
+      <div class="vinyl-content-grid">
+        <section class="vinyl-section">
+          <div class="section-heading"><div><p class="eyebrow">MORCEAUX</p><h2>Tracklist</h2></div></div>
+          <div id="tracklist" class="tracklist"><div class="mini-empty">La tracklist n'est pas encore enregistrée pour cette édition.</div></div>
+        </section>
+
+        <aside class="vinyl-side-info">
+          <section class="dashboard-panel"><p class="eyebrow">ÉCOUTER</p><h2>Streaming</h2><div class="streaming-links" id="streamingLinks"></div></section>
+          <section class="dashboard-panel"><p class="eyebrow">DANS TA COLLECTION</p><h2>Informations</h2><div class="collection-info"><div><span>Ajouté le</span><strong id="vinylAdded">—</strong></div><div><span>Identifiant Discogs</span><strong id="vinylDiscogsId">—</strong></div></div></section>
+        </aside>
+      </div>
+
+      <section class="suggestions-section">
+        <div class="section-heading"><div><p class="eyebrow">À CONTINUER</p><h2>Dans ta collection</h2></div></div>
+        <div class="suggestions-grid" id="suggestionsGrid"></div>
+      </section>
+    </section>
+
+    <section class="page vinyl-not-found" id="vinylNotFound" hidden><span>◎</span><h1>Vinyle introuvable</h1><p>Ce disque n'existe pas dans ta collection locale.</p><a href="accueil.html">Retour à la collection</a></section>
+  </main>
+</div>
+<script src="js/lookup.js"></script>
+  <script src="js/session-guard.js"></script>
+<script src="js/vinyl.js"></script>
+</body>
+</html>
