@@ -320,15 +320,15 @@ function normalizeRelease(release) {
       ? release.styles
       : [];
 
-   const tracklist =
-     Array.isArray(release.tracklist)
-       ? release.tracklist.map(track => ({
-           position: track.position || '',
-           title: track.title || '',
-           duration: track.duration || '',
-           type: track.type_ || 'track'
-         }))
-       : [];
+  const tracklist =
+    Array.isArray(release.tracklist)
+      ? release.tracklist.map(track => ({
+          position: track.position || '',
+          title: track.title || '',
+          duration: track.duration || '',
+          type: track.type_ || 'track'
+        }))
+      : [];
 
   return {
 
@@ -385,6 +385,9 @@ function normalizeRelease(release) {
 
     images:
       getReleaseImages(release),
+
+    tracklist:
+      tracklist,
 
     uri:
       release.uri || null
