@@ -1,0 +1,722 @@
+/* =========================================================
+   THE_CHRONICLER
+   AUTHENTIFICATION V3 DESKTOP
+   ========================================================= */
+
+
+/* =========================================
+   PAGE
+========================================= */
+
+.auth-body{
+  margin:0;
+
+  min-width:1100px;
+
+  min-height:100vh;
+
+  overflow:hidden;
+
+  background:#09090b;
+
+  color:#f1efed;
+}
+
+
+/* =========================================
+   LAYOUT
+========================================= */
+
+.auth-layout{
+  min-height:100vh;
+
+  display:grid;
+
+  grid-template-columns:
+    minmax(520px,1.15fr)
+    minmax(480px,.85fr);
+}
+
+
+/* =========================================
+   PARTIE GAUCHE
+========================================= */
+
+.auth-showcase{
+  position:relative;
+
+  min-height:100vh;
+
+  overflow:hidden;
+
+  padding:42px 55px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  background:
+    radial-gradient(
+      circle at 78% 25%,
+      rgba(142,47,72,.18),
+      transparent 29%
+    ),
+    radial-gradient(
+      circle at 25% 85%,
+      rgba(83,27,42,.13),
+      transparent 34%
+    ),
+    #0c0c0f;
+
+  border-right:1px solid #232328;
+}
+
+
+/* =========================================
+   LOGO
+========================================= */
+
+.auth-logo{
+  position:relative;
+
+  z-index:5;
+
+  width:max-content;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  color:#efeded;
+
+  font-size:13px;
+
+  font-weight:900;
+
+  letter-spacing:.08em;
+}
+
+
+.auth-logo-record{
+  position:relative;
+
+  width:31px;
+  height:31px;
+
+  flex:0 0 auto;
+
+  border-radius:50%;
+
+  border:1px solid #403c42;
+
+  background:
+    repeating-radial-gradient(
+      circle,
+      #242327 0 2px,
+      #0b0b0d 3px 5px
+    );
+}
+
+
+.auth-logo-record:before{
+  content:"";
+
+  position:absolute;
+
+  inset:9px;
+
+  border-radius:50%;
+
+  background:#8e2f48;
+}
+
+
+.auth-logo-record i{
+  position:absolute;
+
+  inset:14px;
+
+  z-index:2;
+
+  border-radius:50%;
+
+  background:#e9e3e2;
+}
+
+
+/* =========================================
+   CONTENU GAUCHE
+========================================= */
+
+.auth-showcase-content{
+  position:relative;
+
+  z-index:4;
+
+  width:min(600px,90%);
+
+  margin:auto 0;
+}
+
+
+.auth-kicker{
+  margin:0 0 16px;
+
+  color:#b05a70;
+
+  font-size:9px;
+
+  font-weight:900;
+
+  letter-spacing:.19em;
+}
+
+
+.auth-showcase h1{
+  margin:0;
+
+  font-size:58px;
+
+  line-height:1;
+
+  letter-spacing:-.055em;
+
+  color:#f3f0ef;
+}
+
+
+.auth-showcase h1 span{
+  color:#9b9699;
+}
+
+
+.auth-intro{
+  max-width:540px;
+
+  margin:25px 0 0;
+
+  color:#817d82;
+
+  font-size:13px;
+
+  line-height:1.8;
+}
+
+
+/* =========================================
+   FONCTIONS
+========================================= */
+
+.auth-features{
+  margin-top:42px;
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:12px;
+}
+
+
+.auth-feature{
+  min-height:92px;
+
+  padding:14px;
+
+  display:flex;
+
+  align-items:center;
+
+  gap:12px;
+
+  border:1px solid #242329;
+
+  border-radius:8px;
+
+  background:rgba(17,17,20,.75);
+}
+
+
+.auth-feature-icon{
+  width:31px;
+  height:31px;
+
+  flex:0 0 auto;
+
+  display:grid;
+
+  place-items:center;
+
+  border-radius:6px;
+
+  background:#21161a;
+
+  color:#bc667d;
+
+  font-size:17px;
+}
+
+
+.auth-feature strong,
+.auth-feature small{
+  display:block;
+}
+
+
+.auth-feature strong{
+  margin-bottom:5px;
+
+  color:#e6e2e1;
+
+  font-size:10px;
+}
+
+
+.auth-feature small{
+  color:#625f64;
+
+  font-size:8px;
+
+  line-height:1.45;
+}
+
+
+/* =========================================
+   VINYLE DÉCORATIF
+========================================= */
+
+.auth-vinyl-decoration{
+  position:absolute;
+
+  right:-180px;
+
+  bottom:-190px;
+
+  width:580px;
+  height:580px;
+
+  opacity:.5;
+
+  pointer-events:none;
+}
+
+
+.auth-vinyl-disc{
+  position:absolute;
+
+  inset:0;
+
+  border-radius:50%;
+
+  background:
+    repeating-radial-gradient(
+      circle,
+      #151518 0 3px,
+      #0a0a0c 4px 7px
+    );
+
+  border:1px solid #29272c;
+
+  box-shadow:
+    0 0 100px rgba(0,0,0,.55);
+}
+
+
+.auth-vinyl-disc:before{
+  content:"";
+
+  position:absolute;
+
+  inset:37%;
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #111 0 9%,
+      #8e2f48 10% 100%
+    );
+
+  border:1px solid #9e435b;
+}
+
+
+.auth-vinyl-disc span{
+  position:absolute;
+
+  inset:49%;
+
+  z-index:2;
+
+  border-radius:50%;
+
+  background:#09090b;
+}
+
+
+/* =========================================
+   BAS DE PAGE GAUCHE
+========================================= */
+
+.auth-showcase-footer{
+  position:relative;
+
+  z-index:5;
+
+  margin:0;
+
+  color:#4f4c51;
+
+  font-size:9px;
+
+  letter-spacing:.08em;
+}
+
+
+/* =========================================
+   PARTIE DROITE
+========================================= */
+
+.auth-panel{
+  min-height:100vh;
+
+  padding:60px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:#0b0b0d;
+}
+
+
+.auth-box{
+  width:100%;
+
+  max-width:430px;
+}
+
+
+/* =========================================
+   TITRE
+========================================= */
+
+.auth-heading{
+  margin-bottom:29px;
+}
+
+
+.auth-heading h2{
+  margin:0;
+
+  color:#f1efed;
+
+  font-size:30px;
+
+  letter-spacing:-.04em;
+}
+
+
+.auth-heading>p:last-child{
+  margin:9px 0 0;
+
+  color:#777378;
+
+  font-size:11px;
+
+  line-height:1.6;
+}
+
+
+/* =========================================
+   ONGLETS
+========================================= */
+
+.auth-tabs{
+  height:42px;
+
+  margin-bottom:25px;
+
+  display:grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  padding:3px;
+
+  border:1px solid #27262b;
+
+  border-radius:7px;
+
+  background:#111114;
+}
+
+
+.auth-tab{
+  border:0;
+
+  border-radius:5px;
+
+  background:transparent;
+
+  color:#68656a;
+
+  cursor:pointer;
+
+  font-size:10px;
+
+  font-weight:700;
+
+  transition:.15s ease;
+}
+
+
+.auth-tab:hover{
+  color:#bcb7ba;
+}
+
+
+.auth-tab.active{
+  background:#241419;
+
+  color:#e9dfe2;
+
+  box-shadow:
+    inset 0 0 0 1px #482330;
+}
+
+
+/* =========================================
+   FORMULAIRE
+========================================= */
+
+.auth-form{
+  display:grid;
+
+  gap:17px;
+}
+
+
+.auth-field{
+  display:grid;
+
+  gap:7px;
+}
+
+
+.auth-field label{
+  color:#8c888c;
+
+  font-size:9px;
+
+  font-weight:750;
+
+  letter-spacing:.04em;
+}
+
+
+.auth-field input{
+  width:100%;
+
+  height:43px;
+
+  padding:0 12px;
+
+  outline:0;
+
+  border:1px solid #29282d;
+
+  border-radius:7px;
+
+  background:#111114;
+
+  color:#ece9e8;
+
+  font-size:11px;
+
+  transition:
+    border-color .15s ease,
+    background .15s ease;
+}
+
+
+.auth-field input::placeholder{
+  color:#504e53;
+}
+
+
+.auth-field input:hover{
+  border-color:#343238;
+}
+
+
+.auth-field input:focus{
+  border-color:#743248;
+
+  background:#141316;
+
+  box-shadow:
+    0 0 0 3px rgba(142,47,72,.08);
+}
+
+
+.auth-password-hint{
+  color:#555258;
+
+  font-size:8px;
+}
+
+
+/* =========================================
+   MESSAGES
+========================================= */
+
+.auth-message{
+  padding:10px 12px;
+
+  border:1px solid #542b37;
+
+  border-radius:6px;
+
+  background:#1d1115;
+
+  color:#d58a9d;
+
+  font-size:9px;
+
+  line-height:1.55;
+}
+
+
+.auth-message.success{
+  border-color:#29452f;
+
+  background:#101a12;
+
+  color:#81ae89;
+}
+
+
+/* =========================================
+   BOUTON PRINCIPAL
+========================================= */
+
+.auth-submit{
+  height:43px;
+
+  margin-top:2px;
+
+  border:1px solid #9a3b55;
+
+  border-radius:7px;
+
+  background:#8e2f48;
+
+  color:white;
+
+  cursor:pointer;
+
+  font-size:10px;
+
+  font-weight:800;
+
+  transition:
+    background .15s ease,
+    transform .15s ease;
+}
+
+
+.auth-submit:hover{
+  background:#a13b57;
+}
+
+
+.auth-submit:active{
+  transform:translateY(1px);
+}
+
+
+.auth-submit:disabled{
+  opacity:.6;
+
+  cursor:wait;
+}
+
+
+/* =========================================
+   CHANGER CONNEXION / INSCRIPTION
+========================================= */
+
+.auth-switch-text{
+  margin:20px 0 0;
+
+  text-align:center;
+
+  color:#666369;
+
+  font-size:9px;
+}
+
+
+.auth-switch-text button{
+  padding:0;
+
+  border:0;
+
+  background:none;
+
+  color:#bd657b;
+
+  cursor:pointer;
+
+  font-weight:750;
+}
+
+
+.auth-switch-text button:hover{
+  text-decoration:underline;
+}
+
+
+/* =========================================
+   SÉCURITÉ
+========================================= */
+
+.auth-security{
+  margin-top:27px;
+
+  padding-top:18px;
+
+  display:flex;
+
+  justify-content:center;
+
+  align-items:center;
+
+  gap:7px;
+
+  border-top:1px solid #1f1e22;
+
+  color:#4e4b50;
+
+  font-size:8px;
+}
+
+
+.auth-security p{
+  margin:0;
+}
+
+
+.auth-security strong{
+  color:#666268;
+
+  font-weight:700;
+}
